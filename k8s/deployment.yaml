@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-pr7
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: springboot-pr7
+  template:
+    metadata:
+      labels:
+        app: springboot-pr7
+    spec:
+      containers:
+        - name: springboot-pr7
+          image: springboot-pr7:latest
+          ports:
+            - containerPort: 8080
