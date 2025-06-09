@@ -21,6 +21,32 @@ pipeline {
         stage('Архівація артефактів') {
             steps { archiveArtifacts artifacts: 'target/*.jar', fingerprint: true }
         }
+        stage('Build Docker Image') {
+                    steps {
+                        script {
+                            sh 'eval $(minikube -p minikube docker-env)'
+                            def img = "springboot-pr7:latest"
+                            sh "docker build -t ${img} ."
+                            echo "Built Docker image ${img}"
+                        }
+                    }
+                }
+
+                stage('Deploy to Minikube') {
+                    steps {
+                        script {
+                            sh 'kubectl config use-context minikube'
+
+                            sh 'kubectl apply -f k8s/deployment.yaml'
+                            sh 'kubectl apply -f k8s/service.yaml'
+
+                            timeout(time:5, unit:'MINUTES') {
+                                sh 'kubectl rollout status deployment/springboot-pr7'
+                            }
+                        }
+                    }
+                }
+
     }
 
     post {

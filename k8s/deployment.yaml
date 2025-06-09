@@ -15,5 +15,6 @@ spec:
       containers:
         - name: springboot-pr7
           image: springboot-pr7:latest
+          imagePullPolicy: Never
           ports:
             - containerPort: 8080
