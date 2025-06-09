@@ -23,16 +23,6 @@ pipeline {
                 sh './mvnw package -DskipTests'
             }
         }
-        /*
-        stage('Збірка Docker-образу') {
-            when {
-                expression { fileExists('Dockerfile') }
-            }
-            steps {
-                sh "docker build -t springboot-pr7:$BUILD_NUMBER ."
-            }
-        }
-        */
         stage('Архівація артефактів') {
             steps {
                 archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
